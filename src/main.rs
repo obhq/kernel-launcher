@@ -3,6 +3,8 @@
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;
+use okf::{Kernel, MappedKernel};
+use x86_64::registers::model_specific::LStar;
 
 // The job of this custom entry point is:
 //
@@ -54,7 +56,17 @@ global_asm!(
 );
 
 #[no_mangle]
-extern "C" fn main(_: *const u8) {}
+extern "C" fn main(_: *const u8) {
+    // Get base address of the kernel.
+    let aslr = LStar::read() - 0xffffffff822001c0;
+    let base = aslr + 0xffffffff82200000;
+    let kernel = unsafe { init(base.as_ptr()) };
+}
+
+#[cfg(fw = "1100")]
+unsafe fn init(base: *const u8) -> impl Kernel {
+    okf_1100::Kernel::new(base)
+}
 
 #[panic_handler]
 fn panic(_: &PanicInfo) -> ! {

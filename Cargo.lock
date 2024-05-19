@@ -3,5 +3,108 @@
 version = 3
 
 [[package]]
+name = "bit_field"
+version = "0.10.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "dc827186963e592360843fb5ba4b973e145841266c1357f7180c43526f2e5b61"
+
+[[package]]
+name = "bitflags"
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf4b9d6a944f767f8e5e0db018570623c85f3d925ac718db4e06d0187adb21c1"
+
+[[package]]
 name = "kernel-launcher"
 version = "0.1.0"
+dependencies = [
+ "okf",
+ "okf-1100",
+ "x86_64",
+]
+
+[[package]]
+name = "okf"
+version = "0.1.0"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#e19e7403ab04be9ae48fa8220fbfe149ccf2a06c"
+dependencies = [
+ "bitflags",
+ "okf-macros",
+]
+
+[[package]]
+name = "okf-1100"
+version = "0.1.0"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#e19e7403ab04be9ae48fa8220fbfe149ccf2a06c"
+dependencies = [
+ "okf",
+]
+
+[[package]]
+name = "okf-macros"
+version = "0.1.0"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#e19e7403ab04be9ae48fa8220fbfe149ccf2a06c"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "proc-macro2"
+version = "1.0.82"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ad3d49ab951a01fbaafe34f2ec74122942fe18a3f9814c3268f1bb72042131b"
+dependencies = [
+ "unicode-ident",
+]
+
+[[package]]
+name = "quote"
+version = "1.0.36"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fa76aaf39101c457836aec0ce2316dbdc3ab723cdda1c6bd4e6ad4208acaca7"
+dependencies = [
+ "proc-macro2",
+]
+
+[[package]]
+name = "rustversion"
+version = "1.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
+
+[[package]]
+name = "syn"
+version = "2.0.64"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ad3dee41f36859875573074334c200d1add8e4a87bb37113ebd31d926b7b11f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "unicode-ident",
+]
+
+[[package]]
+name = "unicode-ident"
+version = "1.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
+
+[[package]]
+name = "volatile"
+version = "0.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "442887c63f2c839b346c192d047a7c87e73d0689c9157b00b53dcc27dd5ea793"
+
+[[package]]
+name = "x86_64"
+version = "0.15.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4bc79523af8abf92fb1a970c3e086c5a343f6bcc1a0eb890f575cbb3b45743df"
+dependencies = [
+ "bit_field",
+ "bitflags",
+ "rustversion",
+ "volatile",
+]
