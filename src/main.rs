@@ -3,6 +3,9 @@
 
 use core::arch::global_asm;
 use core::panic::PanicInfo;
+use okf::ext::KernelExt;
+use okf::socket::{AF_INET, SOCK_STREAM};
+use okf::thread::Thread;
 use okf::{Kernel, MappedKernel};
 use x86_64::registers::model_specific::LStar;
 
@@ -57,15 +60,23 @@ global_asm!(
 
 #[no_mangle]
 extern "C" fn main(_: *const u8) {
-    // Get base address of the kernel.
     let aslr = LStar::read() - 0xffffffff822001c0;
     let base = aslr + 0xffffffff82200000;
     let kernel = unsafe { init(base.as_ptr()) };
+
+    run(kernel);
 }
 
 #[cfg(fw = "1100")]
 unsafe fn init(base: *const u8) -> impl Kernel {
     okf_1100::Kernel::new(base)
+}
+
+fn run<K: Kernel>(k: K) {
+    // Create server socket.
+    let td: *mut K::Thread = Thread::current();
+    let cred = unsafe { (*td).cred() };
+    let server = unsafe { k.create_socket(AF_INET, SOCK_STREAM, 0, cred, td).unwrap() };
 }
 
 #[panic_handler]
