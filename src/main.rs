@@ -4,9 +4,9 @@
 use core::arch::global_asm;
 use core::panic::PanicInfo;
 use okf::ext::KernelExt;
-use okf::socket::{AF_INET, SOCK_STREAM};
+use okf::kernel;
+use okf::socket::{InAddr, SockAddrIn, AF_INET, SOCK_STREAM};
 use okf::thread::Thread;
-use okf::{kernel, Kernel};
 
 // The job of this custom entry point is:
 //
@@ -59,14 +59,16 @@ global_asm!(
 
 #[no_mangle]
 extern "C" fn main(_: *const u8) {
-    run(unsafe { kernel!() });
-}
+    let k = unsafe { kernel!() };
 
-fn run<K: Kernel>(k: K) {
     // Create server socket.
-    let td: *mut K::Thread = Thread::current();
-    let cred = unsafe { (*td).cred() };
-    let server = unsafe { k.create_socket(AF_INET, SOCK_STREAM, 0, cred, td).unwrap() };
+    let td = Thread::current();
+    let server = unsafe { k.socket(AF_INET, SOCK_STREAM, 0, td).unwrap() };
+
+    // Set server address.
+    let mut addr = SockAddrIn::new(InAddr::ANY, 9020);
+
+    unsafe { k.bind(server.as_raw(), addr.as_mut(), td).unwrap() };
 }
 
 #[panic_handler]
