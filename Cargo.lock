@@ -3,12 +3,6 @@
 version = 3
 
 [[package]]
-name = "bit_field"
-version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc827186963e592360843fb5ba4b973e145841266c1357f7180c43526f2e5b61"
-
-[[package]]
 name = "bitflags"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -20,13 +14,12 @@ version = "0.1.0"
 dependencies = [
  "okf",
  "okf-1100",
- "x86_64",
 ]
 
 [[package]]
 name = "okf"
 version = "0.1.0"
-source = "git+ssh://git@github.com/obhq/kernel-framework.git#c1e3ce54a7771ee2fe06466179c8fe5096543e19"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#a268d66b92e835cf1500b01d631cc694e6defa77"
 dependencies = [
  "bitflags",
  "okf-macros",
@@ -35,7 +28,7 @@ dependencies = [
 [[package]]
 name = "okf-1100"
 version = "0.1.0"
-source = "git+ssh://git@github.com/obhq/kernel-framework.git#c1e3ce54a7771ee2fe06466179c8fe5096543e19"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#a268d66b92e835cf1500b01d631cc694e6defa77"
 dependencies = [
  "okf",
 ]
@@ -43,7 +36,7 @@ dependencies = [
 [[package]]
 name = "okf-macros"
 version = "0.1.0"
-source = "git+ssh://git@github.com/obhq/kernel-framework.git#c1e3ce54a7771ee2fe06466179c8fe5096543e19"
+source = "git+ssh://git@github.com/obhq/kernel-framework.git#a268d66b92e835cf1500b01d631cc694e6defa77"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -52,9 +45,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.82"
+version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ad3d49ab951a01fbaafe34f2ec74122942fe18a3f9814c3268f1bb72042131b"
+checksum = "0b33eb56c327dec362a9e55b3ad14f9d2f0904fb5a5b03b513ab5465399e9f43"
 dependencies = [
  "unicode-ident",
 ]
@@ -69,16 +62,10 @@ dependencies = [
 ]
 
 [[package]]
-name = "rustversion"
-version = "1.0.17"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "955d28af4278de8121b7ebeb796b6a45735dc01436d898801014aced2773a3d6"
-
-[[package]]
 name = "syn"
-version = "2.0.64"
+version = "2.0.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7ad3dee41f36859875573074334c200d1add8e4a87bb37113ebd31d926b7b11f"
+checksum = "d2863d96a84c6439701d7a38f9de935ec562c8832cc55d1dde0f513b52fad106"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -90,21 +77,3 @@ name = "unicode-ident"
 version = "1.0.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
-
-[[package]]
-name = "volatile"
-version = "0.4.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "442887c63f2c839b346c192d047a7c87e73d0689c9157b00b53dcc27dd5ea793"
-
-[[package]]
-name = "x86_64"
-version = "0.15.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4bc79523af8abf92fb1a970c3e086c5a343f6bcc1a0eb890f575cbb3b45743df"
-dependencies = [
- "bit_field",
- "bitflags",
- "rustversion",
- "volatile",
-]

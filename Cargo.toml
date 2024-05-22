@@ -5,7 +5,6 @@ edition = "2021"
 
 [dependencies]
 okf = { git = "ssh://git@github.com/obhq/kernel-framework.git" }
-x86_64 = "0.15.1"
 
 [target.'cfg(fw = "1100")'.dependencies]
 okf-1100 = { git = "ssh://git@github.com/obhq/kernel-framework.git" }

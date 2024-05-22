@@ -6,8 +6,7 @@ use core::panic::PanicInfo;
 use okf::ext::KernelExt;
 use okf::socket::{AF_INET, SOCK_STREAM};
 use okf::thread::Thread;
-use okf::{Kernel, MappedKernel};
-use x86_64::registers::model_specific::LStar;
+use okf::{kernel, Kernel};
 
 // The job of this custom entry point is:
 //
@@ -60,16 +59,7 @@ global_asm!(
 
 #[no_mangle]
 extern "C" fn main(_: *const u8) {
-    let aslr = LStar::read() - 0xffffffff822001c0;
-    let base = aslr + 0xffffffff82200000;
-    let kernel = unsafe { init(base.as_ptr()) };
-
-    run(kernel);
-}
-
-#[cfg(fw = "1100")]
-unsafe fn init(base: *const u8) -> impl Kernel {
-    okf_1100::Kernel::new(base)
+    run(unsafe { kernel!() });
 }
 
 fn run<K: Kernel>(k: K) {
