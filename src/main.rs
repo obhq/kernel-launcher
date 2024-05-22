@@ -69,6 +69,7 @@ extern "C" fn main(_: *const u8) {
     let mut addr = SockAddrIn::new(InAddr::ANY, 9020);
 
     unsafe { k.bind(server.as_raw(), addr.as_mut(), td).unwrap() };
+    unsafe { k.listen(server.as_raw(), 1, td).unwrap() };
 }
 
 #[panic_handler]
