@@ -90,7 +90,7 @@ fn run<K: Kernel>(k: K) {
 
     loop {
         // Wait for socket events.
-        unsafe {
+        let error = unsafe {
             k.sleep(
                 (*server).timeout_mut() as *mut c_short as _,
                 (*mtx).lock_mut(),
@@ -99,6 +99,8 @@ fn run<K: Kernel>(k: K) {
                 0,
             )
         };
+
+        assert_eq!(error, 0);
     }
 }
 
