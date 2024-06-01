@@ -79,16 +79,16 @@ fn run<K: Kernel>(k: K) {
     // Wait for a connection.
     let mtx = k.var(K::ACCEPT_MTX).ptr();
 
-    loop {
-        unsafe {
-            k.mtx_lock_flags(
-                mtx,
-                0,
-                c"W:\\Build\\J02650690\\sys\\freebsd\\sys\\kern\\uipc_syscalls.c".as_ptr(),
-                666,
-            )
-        };
+    unsafe {
+        k.mtx_lock_flags(
+            mtx,
+            0,
+            c"W:\\Build\\J02650690\\sys\\freebsd\\sys\\kern\\uipc_syscalls.c".as_ptr(),
+            666,
+        )
+    };
 
+    loop {
         // Wait for socket events.
         unsafe {
             k.sleep(
