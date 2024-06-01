@@ -2,7 +2,6 @@
 #![no_main]
 
 use core::arch::global_asm;
-use core::ffi::c_short;
 use core::panic::PanicInfo;
 use okf::ext::KernelExt;
 use okf::lock::Mtx;
@@ -89,13 +88,16 @@ fn run<K: Kernel>(k: K) {
     };
 
     loop {
-        // Make sure socket has no error.
-        assert_eq!(unsafe { (*server).error() }, 0);
+        // Check if error.
+        if unsafe { (*server).error() != 0 } {
+            unsafe { (*server).set_error(0) };
+        } else {
+        }
 
         // Wait for socket events.
         let error = unsafe {
             k.sleep(
-                (*server).timeout_mut() as *mut c_short as _,
+                (*server).timeout().cast(),
                 (*mtx).lock_mut(),
                 0x1058,
                 c"accept".as_ptr(),
