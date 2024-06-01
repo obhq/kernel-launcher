@@ -2,11 +2,13 @@
 #![no_main]
 
 use core::arch::global_asm;
+use core::ffi::c_short;
 use core::panic::PanicInfo;
 use okf::ext::KernelExt;
-use okf::kernel;
-use okf::socket::{InAddr, SockAddrIn, AF_INET, SOCK_STREAM};
-use okf::thread::Thread;
+use okf::lock::Mtx;
+use okf::pcpu::Pcpu;
+use okf::socket::{InAddr, SockAddrIn, Socket, AF_INET, SOCK_STREAM};
+use okf::{kernel, Kernel};
 
 // The job of this custom entry point is:
 //
@@ -59,17 +61,45 @@ global_asm!(
 
 #[no_mangle]
 extern "C" fn main(_: *const u8) {
-    let k = unsafe { kernel!() };
+    run(<kernel!()>::default());
+}
 
+fn run<K: Kernel>(k: K) {
     // Create server socket.
-    let td = Thread::current();
+    let td = K::Pcpu::curthread();
     let server = unsafe { k.socket(AF_INET, SOCK_STREAM, 0, td).unwrap() };
+    let server = server.as_raw();
 
     // Set server address.
     let mut addr = SockAddrIn::new(InAddr::ANY, 9020);
 
-    unsafe { k.bind(server.as_raw(), addr.as_mut(), td).unwrap() };
-    unsafe { k.listen(server.as_raw(), 1, td).unwrap() };
+    unsafe { k.bind(server, addr.as_mut(), td).unwrap() };
+    unsafe { k.listen(server, 1, td).unwrap() };
+
+    // Wait for a connection.
+    let mtx = k.var(K::ACCEPT_MTX).ptr();
+
+    loop {
+        unsafe {
+            k.mtx_lock_flags(
+                mtx,
+                0,
+                c"W:\\Build\\J02650690\\sys\\freebsd\\sys\\kern\\uipc_syscalls.c".as_ptr(),
+                666,
+            )
+        };
+
+        // Wait for socket events.
+        unsafe {
+            k.sleep(
+                (*server).timeout_mut() as *mut c_short as _,
+                (*mtx).lock_mut(),
+                0x1058,
+                c"accept".as_ptr(),
+                0,
+            )
+        };
+    }
 }
 
 #[panic_handler]
