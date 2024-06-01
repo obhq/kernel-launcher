@@ -89,6 +89,9 @@ fn run<K: Kernel>(k: K) {
     };
 
     loop {
+        // Make sure socket has no error.
+        assert_eq!(unsafe { (*server).error() }, 0);
+
         // Wait for socket events.
         let error = unsafe {
             k.sleep(
